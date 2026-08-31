@@ -1,0 +1,9 @@
+.git
+.gitignore
+.env
+terraform/
+security/
+release-notes.md
+README.md
+__pycache__/
+*.pyc

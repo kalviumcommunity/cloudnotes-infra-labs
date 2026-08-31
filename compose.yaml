@@ -1,0 +1,28 @@
+services:
+  api:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: cloudnotes-api:0.1.0
+    ports:
+      - "8080:5000"
+    environment:
+      APP_ENV: local
+      # NOTE: runtime secrets must come from .env (see .env.example),
+      # never be committed as a literal value here. Something below
+      # looks like a real, hardcoded credential — that is the planted
+      # security issue for this exercise.
+      API_TOKEN: "sk-live-51Hh2x9FakeCloudNotesProdToken"
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request,sys; sys.exit(0) if urllib.request.urlopen('http://localhost:5000/health').status==200 else sys.exit(1)"]
+      interval: 10s
+      timeout: 3s
+      retries: 5
+      start_period: 5s
+
+  # Local, credential-free registry so students can practice a
+  # push/pull artifact flow without any paid or hosted registry.
+  registry:
+    image: registry:2
+    ports:
+      - "5001:5000"
